@@ -10,6 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.modelmapper.ModelMapper;
+
+import com.diegosimon.pagamento.data.vo.ProdutoVO;
+import com.diegosimon.pagamento.data.vo.ProdutoVendaVO;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -45,5 +51,37 @@ public class ProdutoVenda implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_venda")
 	private Venda venda;
+	
+	public static ProdutoVenda create(ProdutoVendaVO produtoVo) {
+		return new ModelMapper().map(produtoVo, ProdutoVenda.class);
+	}
 
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public Long getIdProduto() {
+		return idProduto;
+	}
+	
+	public void setIdProduto(Long idProduto) {
+		this.idProduto = idProduto;
+	}
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
+	}
+	
+	public Venda getVenda() {
+		return venda;
+	}
+	
+	public void setVenda(Venda venda) {
+		this.venda = venda;
+	}
 }

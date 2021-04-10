@@ -14,7 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.diegosimon.pagamento.data.vo.VendaVO;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -50,8 +53,36 @@ public class Venda implements Serializable {
 	private List<ProdutoVenda> produtos;
 	
 	@Column(name = "valor", nullable = false, length = 10)
-	private Double valor;
+	private Double valorTotal;
 	
+	public static Venda create(VendaVO venda) {
+		return new ModelMapper().map(venda, Venda.class);
+	}
 	
-
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public Date getData() {
+		return data;
+	}
+	public void setData(Date data) {
+		this.data = data;
+	}
+	public List<ProdutoVenda> getProdutos() {
+		return produtos;
+	}
+	public void setProdutos(List<ProdutoVenda> produtos) {
+		this.produtos = produtos;
+	}
+	
+	public Double getValorTotal() {
+		return valorTotal;
+	}
+	public void setValorTotal(Double valorTotal) {
+		this.valorTotal = valorTotal;
+	}
 }
