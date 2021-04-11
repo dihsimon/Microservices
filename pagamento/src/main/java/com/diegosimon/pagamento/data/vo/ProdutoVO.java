@@ -8,6 +8,7 @@ import org.springframework.hateoas.RepresentationModel;
 import com.diegosimon.pagamento.entity.Produto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -37,5 +38,18 @@ public class ProdutoVO extends RepresentationModel<ProdutoVO> implements Seriali
 	
 	public static ProdutoVO create(Produto produto) {
 		return new ModelMapper().map(produto, ProdutoVO.class);
+	}
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Integer getEstoque() {
+		return estoque;
+	}
+	public void setEstoque(Integer estoque) {
+		this.estoque = estoque;
 	}
 }

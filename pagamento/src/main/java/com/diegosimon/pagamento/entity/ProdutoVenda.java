@@ -1,6 +1,7 @@
 package com.diegosimon.pagamento.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,7 +14,6 @@ import javax.persistence.Table;
 
 import org.modelmapper.ModelMapper;
 
-import com.diegosimon.pagamento.data.vo.ProdutoVO;
 import com.diegosimon.pagamento.data.vo.ProdutoVendaVO;
 
 import lombok.AllArgsConstructor;
