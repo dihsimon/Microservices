@@ -20,7 +20,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ProductVO extends RepresentationModel<ProductVO> implements Serializable{
+public class ProdutoVO extends RepresentationModel<ProdutoVO> implements Serializable{
 
 	/**
 	 * SerialVersionUID
@@ -39,8 +39,8 @@ public class ProductVO extends RepresentationModel<ProductVO> implements Seriali
 	@JsonProperty("preco")
 	private Double preco;
 	
-	public static ProductVO create(Produto produto) {
-		return new ModelMapper().map(produto, ProductVO.class);
+	public static ProdutoVO create(Produto produto) {
+		return new ModelMapper().map(produto, ProdutoVO.class);
 	}
 	
 	public Long getId() {

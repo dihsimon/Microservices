@@ -7,9 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.diegosimon.crud.data.vo.ProductVO;
+import com.diegosimon.crud.data.vo.ProdutoVO;
 import com.diegosimon.crud.entity.Produto;
 import com.diegosimon.crud.exception.ResourceNotFoundException;
+import com.diegosimon.crud.message.ProdutoSendMessage;
 import com.diegosimon.crud.repository.ProdutoRepository;
 
 @Service
@@ -17,36 +18,41 @@ public class ProdutoService {
 
 	private ProdutoRepository produtoRepository;
 	
+	private final ProdutoSendMessage produtoSendMessage;
+	
 	@Autowired
-	public ProdutoService(ProdutoRepository produtoRepository) {
+	public ProdutoService(ProdutoRepository produtoRepository, ProdutoSendMessage produtoSendMessage) {
 		this.produtoRepository = produtoRepository;
+		this.produtoSendMessage = produtoSendMessage;
 	}
 	
-	public ProductVO create(ProductVO product) {
-		return ProductVO.create(this.produtoRepository.save(Produto.create(product)));
+	public ProdutoVO create(ProdutoVO product) {
+		final ProdutoVO produtoCriado = ProdutoVO.create(this.produtoRepository.save(Produto.create(product)));
+		produtoSendMessage.sendMessage(produtoCriado);
+		return produtoCriado;
 	}
 	
-	public Page<ProductVO> findAll(Pageable pageable){	
+	public Page<ProdutoVO> findAll(Pageable pageable){	
 		var page = this.produtoRepository.findAll(pageable);
 		return page.map(this::convertToProductVO);
 	}
 	
-	private ProductVO convertToProductVO(Produto produto) {
-		return ProductVO.create(produto);
+	private ProdutoVO convertToProductVO(Produto produto) {
+		return ProdutoVO.create(produto);
 	}
 	
-	public ProductVO findByID(Long id) {
+	public ProdutoVO findByID(Long id) {
 		var entity = produtoRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
-		return ProductVO.create(entity);
+		return ProdutoVO.create(entity);
 	}
 	
-	public ProductVO update(ProductVO productVo) {
+	public ProdutoVO update(ProdutoVO productVo) {
 		final Optional<Produto> optionProduto = this.produtoRepository.findById(productVo.getId());
 		if(!optionProduto.isPresent()) {
 			new ResourceNotFoundException("No records found for this ID");
 		}
-		return ProductVO.create(this.produtoRepository.save(Produto.create(productVo)));
+		return ProdutoVO.create(this.produtoRepository.save(Produto.create(productVo)));
 	}
 	
 	public void delete(Long id) {

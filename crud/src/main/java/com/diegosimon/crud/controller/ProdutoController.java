@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.diegosimon.crud.data.vo.ProductVO;
+import com.diegosimon.crud.data.vo.ProdutoVO;
 import com.diegosimon.crud.service.ProdutoService;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo; 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn; 
@@ -30,18 +30,18 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ProdutoController {
 
 	private final ProdutoService produtoService;
-	private final PagedResourcesAssembler<ProductVO> assembler;
+	private final PagedResourcesAssembler<ProdutoVO> assembler;
 	
 	@Autowired
-	public ProdutoController(ProdutoService produtoService, PagedResourcesAssembler<ProductVO> assembler) {
+	public ProdutoController(ProdutoService produtoService, PagedResourcesAssembler<ProdutoVO> assembler) {
 		super();
 		this.produtoService = produtoService;
 		this.assembler = assembler;
 	}
 	
 	@GetMapping(value = "/{id}", produces = {"application/json", "application/xml", "application/x-yml"})
-	public ProductVO findById(@PathVariable(name = "id") Long id) {
-		ProductVO product = this.produtoService.findByID(id);
+	public ProdutoVO findById(@PathVariable(name = "id") Long id) {
+		ProdutoVO product = this.produtoService.findByID(id);
 		product.add(linkTo(methodOn(ProdutoController.class).findById(id)).withSelfRel());
 		return product;
 	}
@@ -53,25 +53,25 @@ public class ProdutoController {
 		
 		var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
 		Pageable pageable = PageRequest.of(page, limit, Sort.by(sortDirection, "nome")); 
-		Page<ProductVO> produtos = this.produtoService.findAll(pageable);
+		Page<ProdutoVO> produtos = this.produtoService.findAll(pageable);
 		produtos.stream()
 				.forEach(p -> p.add(linkTo(methodOn(ProdutoController.class).findById(p.getId())).withSelfRel()));
-		PagedModel<EntityModel<ProductVO>> pageModel = assembler.toModel(produtos);
+		PagedModel<EntityModel<ProdutoVO>> pageModel = assembler.toModel(produtos);
 		
 		return new ResponseEntity<>(pageModel, HttpStatus.OK);
 	}
 	
 	@PostMapping(produces = {"application/json", "application/xml", "application/x-yml"}, 
 			consumes = {"application/json", "application/xml", "application/x-yml"})
-	public ProductVO create(@RequestBody ProductVO product) {
-		ProductVO produtoCriado = this.produtoService.create(product);
+	public ProdutoVO create(@RequestBody ProdutoVO product) {
+		ProdutoVO produtoCriado = this.produtoService.create(product);
 		produtoCriado.add(linkTo(methodOn(ProdutoController.class).findById(produtoCriado.getId())).withSelfRel());
 		return produtoCriado;
 	}
 	
 	@PutMapping(produces = {"application/json", "application/xml", "application/x-yml"})
-	public ProductVO update(@RequestBody ProductVO product) {
-		ProductVO produtoCriado = this.produtoService.update(product);
+	public ProdutoVO update(@RequestBody ProdutoVO product) {
+		ProdutoVO produtoCriado = this.produtoService.update(product);
 		produtoCriado.add(linkTo(methodOn(ProdutoController.class).findById(product.getId())).withSelfRel());
 		return produtoCriado;
 	}
